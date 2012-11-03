@@ -1,0 +1,39 @@
+# all kinds of build outputs
+*.a
+*.bin
+*.exe
+*.hex
+*.lss
+*.map
+*.o
+.built
+.context
+.depend
+.fakelnk
+nuttx/nuttx
+Make.dep
+
+# NuttX current configuration files
+nuttx/.config
+nuttx/.version
+nuttx/Make.defs
+nuttx/setenv.sh
+nuttx/include/nuttx/config.h
+nuttx/include/nuttx/version.h
+apps/.config
+apps/namedapp/namedapp_list.h
+apps/namedapp/namedapp_proto.h
+
+# linked version of some folders
+nuttx/arch/arm/src/board/
+nuttx/arch/arm/src/chip/
+nuttx/include/apps/
+nuttx/include/arch/
+
+# Eclipse project files in the topdir
+/.cproject
+/.project
+/.settings
+
+# top-level (additional) Makefile
+/Makefile
