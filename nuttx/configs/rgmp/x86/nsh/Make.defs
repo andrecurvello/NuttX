@@ -6,6 +6,8 @@
 #   Authors: Yu Qiang <yuq825@gmail.com>
 #            Gregory Nutt <gnutt@nuttx.org>
 #
+#	Copyright (C) 2012 Freddie Chopin <freddie.chopin@gmail.com>
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
 # are met:
@@ -37,10 +39,13 @@
 
 include ${TOPDIR}/.config
 include ${TOPDIR}/tools/Config.mk
+include ${TOPDIR}/Includes.mk
 
 RGMPLIBDIR := $(RGMP_INST_DIR)/lib
 RGMPINCDIR := $(RGMP_INST_DIR)/include
 RGMPLKSCPT := $(RGMP_INST_DIR)/etc/rgmp.ld
+
+GLOBAL_INCLUDES += $(RGMPINCDIR) $(TOPDIR)/configs/rgmp/include $(TOPDIR)/arch/rgmp/include/x86
 
 HOSTOS			= ${shell uname -o}
 
@@ -54,8 +59,7 @@ ARCHCPUFLAGS		= -fno-builtin -nostdinc -fno-stack-protector
 ARCHPICFLAGS		= -fpic
 ARCHWARNINGS		= -Wall -Wstrict-prototypes -Wshadow
 ARCHDEFINES		= -D__RGMP_KERNEL__ -D__RTOS_KERNEL__ -D__SHARE_KERNEL__
-ARCHINCLUDES		= -I. -isystem $(TOPDIR)/include -I$(RGMPINCDIR) \
-			  -I$(TOPDIR)/configs/rgmp/include -I$(TOPDIR)/arch/rgmp/include/x86
+ARCHINCLUDES		= -I. ${patsubst %,-isystem %,$(GLOBAL_SYSTEM_INCLUDES)} ${patsubst %,-I%,$(GLOBAL_INCLUDES)}
 ARCHSCRIPT		=
 
 CROSSDEV		=

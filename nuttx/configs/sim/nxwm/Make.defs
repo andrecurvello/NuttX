@@ -4,6 +4,8 @@
 #   Copyright (C) 2012 Gregory Nutt. All rights reserved.
 #   Author: Gregory Nutt <gnutt@nuttx.org>
 #
+#	Copyright (C) 2012 Freddie Chopin <freddie.chopin@gmail.com>
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
 # are met:
@@ -35,6 +37,7 @@
 
 include ${TOPDIR}/.config
 include ${TOPDIR}/tools/Config.mk
+include ${TOPDIR}/Includes.mk
 
 HOSTOS			= ${shell uname -o 2>/dev/null || echo "Other"}
 
@@ -50,8 +53,8 @@ ARCHPICFLAGS		= -fpic
 ARCHWARNINGS		= -Wall -Wstrict-prototypes -Wshadow
 ARCHWARNINGSXX		= -Wall -Wshadow
 ARCHDEFINES		=
-ARCHINCLUDES		= -I. -isystem $(TOPDIR)/include
-ARCHINCLUDESXX		= -I. -isystem $(TOPDIR)/include -isystem $(TOPDIR)/include/cxx
+ARCHINCLUDES = -I. ${patsubst %,-isystem %,$(GLOBAL_SYSTEM_INCLUDES)} ${patsubst %,-I%,$(GLOBAL_INCLUDES)}
+ARCHINCLUDESXX = -I. ${patsubst %,-isystem %,$(GLOBAL_SYSTEM_CXX_INCLUDES)} ${patsubst %,-I%,$(GLOBAL_CXX_INCLUDES)}
 ARCHSCRIPT		=
 
 ifeq ($(CONFIG_SIM_M32),y)

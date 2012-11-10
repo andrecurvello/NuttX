@@ -4,6 +4,8 @@
 #   Copyright (C) 2009 Gregory Nutt. All rights reserved.
 #   Author: Gregory Nutt <gnutt@nuttx.org>
 #
+#	Copyright (C) 2012 Freddie Chopin <freddie.chopin@gmail.com>
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
 # are met:
@@ -35,6 +37,7 @@
 
 include ${TOPDIR}/.config
 include ${TOPDIR}/tools/Config.mk
+include ${TOPDIR}/Includes.mk
 
 CROSSDEV		= arm-nuttx-elf-
 CC			= $(CROSSDEV)gcc
@@ -67,8 +70,8 @@ else
   ARCHCPUFLAGS		= -mapcs-32 -mtune=arm920t -march=armv4t -msoft-float
 endif
 ARCHDEFINES		=
-ARCHINCLUDES		= -I. -isystem $(TOPDIR)/include
-ARCHXXINCLUDES		= -I. -isystem $(TOPDIR)/include -isystem $(TOPDIR)/include/cxx
+ARCHINCLUDES = -I. ${patsubst %,-isystem %,$(GLOBAL_SYSTEM_INCLUDES)} ${patsubst %,-I%,$(GLOBAL_INCLUDES)}
+ARCHXXINCLUDES = -I. ${patsubst %,-isystem %,$(GLOBAL_SYSTEM_CXX_INCLUDES)} ${patsubst %,-I%,$(GLOBAL_CXX_INCLUDES)}
 
 ARCHPICFLAGS		= -fpic -msingle-pic-base -mpic-register=r10
 ARCHSCRIPT		= -T$(TOPDIR)/configs/$(CONFIG_ARCH_BOARD)/ostest/ld.script

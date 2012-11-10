@@ -1,8 +1,5 @@
 ############################################################################
-# configs/skp16c26/ostest/Make.defs
-#
-#   Copyright (C) 2009 Gregory Nutt. All rights reserved.
-#   Author: Gregory Nutt <gnutt@nuttx.org>
+# Includes.mk
 #
 #	Copyright (C) 2012 Freddie Chopin <freddie.chopin@gmail.com>
 #
@@ -35,53 +32,10 @@
 #
 ############################################################################
 
-include ${TOPDIR}/.config
-include ${TOPDIR}/tools/Config.mk
-include ${TOPDIR}/Includes.mk
+# folders included as "system" includes
+GLOBAL_SYSTEM_INCLUDES = $(TOPDIR)/include
+GLOBAL_SYSTEM_CXX_INCLUDES = $(GLOBAL_SYSTEM_INCLUDES) $(TOPDIR)/include/cxx
 
-CROSSDEV		= m32c-nuttx-elf-
-CC			= $(CROSSDEV)gcc
-CPP			= $(CROSSDEV)gcc -E
-LD			= $(CROSSDEV)ld
-AR			= $(CROSSDEV)ar rcs
-NM			= $(CROSSDEV)nm
-OBJCOPY			= $(CROSSDEV)objcopy
-OBJDUMP			= $(CROSSDEV)objdump
-
-ARCHCCVERSION		= ${shell $(CC) -v 2>&1 | sed -n '/^gcc version/p' | sed -e 's/^gcc version \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q'}
-ARCHCCMAJOR		= ${shell echo $(ARCHCCVERSION) | cut -d'.' -f1}
-
-ifeq ("${CONFIG_DEBUG_SYMBOLS}","y")
-  ARCHOPTIMIZATION	= -g
-else
-  ARCHOPTIMIZATION	= -Os -fno-strict-aliasing -fno-strength-reduce -fomit-frame-pointer
-endif
-
-ARCHCPUFLAGS		= -mcpu=m16c -fno-builtin
-ARCHPICFLAGS		= -fpic
-ARCHWARNINGS		= -Wall -Wstrict-prototypes -Wshadow
-ARCHDEFINES		=
-ARCHINCLUDES = -I. ${patsubst %,-isystem %,$(GLOBAL_SYSTEM_INCLUDES)} ${patsubst %,-I%,$(GLOBAL_INCLUDES)}
-ARCHSCRIPT		= -T$(TOPDIR)/configs/$(CONFIG_ARCH_BOARD)/ostest/ld.script
-
-CFLAGS			= $(ARCHWARNINGS) $(ARCHOPTIMIZATION) \
-			  $(ARCHCPUFLAGS) $(ARCHINCLUDES) $(ARCHDEFINES) $(EXTRADEFINES) -pipe
-CPPFLAGS		= $(ARCHINCLUDES) $(ARCHDEFINES) $(EXTRADEFINES)
-AFLAGS			= $(CFLAGS) -D__ASSEMBLY__
-
-OBJEXT			= .o
-LIBEXT			= .a
-EXEEXT			=
-
-ifeq ("${CONFIG_DEBUG_SYMBOLS}","y")
-  LDFLAGS		+= -g
-endif
-
-
-MKDEP			= $(TOPDIR)/tools/mkdeps.sh
-
-HOSTCC			= gcc
-HOSTINCLUDES		= -I.
-HOSTCFLAGS		= -Wall -Wstrict-prototypes -Wshadow -g -pipe
-HOSTLDFLAGS		=
-
+# folder included in a standard way
+GLOBAL_INCLUDES =
+GLOBAL_CXX_INCLUDES =

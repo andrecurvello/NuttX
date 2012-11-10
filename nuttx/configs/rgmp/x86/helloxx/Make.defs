@@ -6,6 +6,8 @@
 #   Authors: Yu Qiang <yuq825@gmail.com>
 #            Gregory Nutt <spudmonkey@racsa.co.cr>
 #
+#	Copyright (C) 2012 Freddie Chopin <freddie.chopin@gmail.com>
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
 # are met:
@@ -37,10 +39,15 @@
 
 include ${TOPDIR}/.config
 include ${TOPDIR}/tools/Config.mk
+include ${TOPDIR}/Includes.mk
 
 RGMPLIBDIR := $(RGMP_INST_DIR)/lib
 RGMPINCDIR := $(RGMP_INST_DIR)/include
 RGMPLKSCPT := $(RGMP_INST_DIR)/etc/rgmp.ld
+
+GLOBAL_INCLUDES += $(RGMPINCDIR) $(TOPDIR)/configs/rgmp/include $(TOPDIR)/arch/rgmp/include/x86
+GLOBAL_CXX_INCLUDES += $(RGMPINCDIR) $(TOPDIR)/configs/rgmp/include $(TOPDIR)/arch/rgmp/include/x86 \
+	$(TOPDIR)/include/uClibc++
 
 HOSTOS			= ${shell uname -o}
 
@@ -56,12 +63,9 @@ ARCHPICFLAGS    = -fpic
 ARCHWARNINGS    = -Wall -Wstrict-prototypes -Wshadow
 ARCHWARNINGSXX  = -Wall -Wshadow
 ARCHDEFINES     = -D__RGMP_KERNEL__ -D__RTOS_KERNEL__ -D__SHARE_KERNEL__
-ARCHINCLUDES    = -I. -isystem $(TOPDIR)/include -I$(RGMPINCDIR) \
-			      -I$(TOPDIR)/configs/rgmp/include -I$(TOPDIR)/arch/rgmp/include/x86
+ARCHINCLUDES    = -I. ${patsubst %,-isystem %,$(GLOBAL_SYSTEM_INCLUDES)} ${patsubst %,-I%,$(GLOBAL_INCLUDES)}
 
-ARCHXXINCLUDES  = -I$(TOPDIR)/include/cxx -isystem $(TOPDIR)/include -I$(RGMPINCDIR) \
-			      -I$(TOPDIR)/configs/rgmp/include -I$(TOPDIR)/arch/rgmp/include/x86 \
-                  -I$(TOPDIR)/include/uClibc++
+ARCHXXINCLUDES  = ${patsubst %,-isystem %,$(GLOBAL_SYSTEM_CXX_INCLUDES)} ${patsubst %,-I%,$(GLOBAL_CXX_INCLUDES)}
 
 CROSSDEV    =
 CC			= $(CROSSDEV)gcc

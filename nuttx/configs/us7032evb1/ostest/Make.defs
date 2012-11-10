@@ -4,6 +4,8 @@
 #   Copyright (C) 2008 Gregory Nutt. All rights reserved.
 #   Author: Gregory Nutt <gnutt@nuttx.org>
 #
+#	Copyright (C) 2012 Freddie Chopin <freddie.chopin@gmail.com>
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
 # are met:
@@ -35,6 +37,7 @@
 
 include ${TOPDIR}/.config
 include ${TOPDIR}/tools/Config.mk
+include ${TOPDIR}/Includes.mk
 
 ifeq ("${CONFIG_DEBUG_SYMBOLS}","y")
   ARCHOPTIMIZATION	= -g
@@ -47,7 +50,7 @@ ARCHCPUFLAGS		= -m1 -fno-builtin
 ARCHPICFLAGS		= -fpic
 ARCHWARNINGS		= -Wall -Wstrict-prototypes -Wshadow
 ARCHDEFINES		=
-ARCHINCLUDES		= -I. -isystem $(TOPDIR)/include
+ARCHINCLUDES = -I. ${patsubst %,-isystem %,$(GLOBAL_SYSTEM_INCLUDES)} ${patsubst %,-I%,$(GLOBAL_INCLUDES)}
 ARCHSCRIPT		= -T$(TOPDIR)/configs/$(CONFIG_ARCH_BOARD)/ostest/ld.script
 
 CROSSDEV		= sh-nuttx-elf-

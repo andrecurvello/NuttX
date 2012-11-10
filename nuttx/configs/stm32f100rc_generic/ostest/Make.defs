@@ -3,7 +3,8 @@
 #
 #   Copyright (C) 2012 Gregory Nutt. All rights reserved.
 #   Author: Gregory Nutt <gnutt@nuttx.org>
-#           Freddie Chopin <freddie_chopin@op.pl>
+#
+#	Copyright (C) 2012 Freddie Chopin <freddie.chopin@gmail.com>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -36,6 +37,7 @@
 
 include ${TOPDIR}/.config
 include ${TOPDIR}/tools/Config.mk
+include ${TOPDIR}/Includes.mk
 
 # Setup for the selected toolchain
 
@@ -81,15 +83,17 @@ ifeq ($(WINTOOL),y)
   DIRLINK = $(TOPDIR)/tools/winlink.sh
   DIRUNLINK = $(TOPDIR)/tools/unlink.sh
   MKDEP = $(TOPDIR)/tools/mknulldeps.sh
-  ARCHINCLUDES = -I. -isystem "${shell cygpath -w $(TOPDIR)/include}"
-  ARCHXXINCLUDES = -I. -isystem "${shell cygpath -w $(TOPDIR)/include}" -isystem "${shell cygpath -w $(TOPDIR)/include/cxx}"
+  ARCHINCLUDES = -I. ${patsubst %,-isystem "${shell cygpath -w %}",$(GLOBAL_SYSTEM_INCLUDES)} \
+	${patsubst %,-I"${shell cygpath -w %}",$(GLOBAL_INCLUDES)}
+  ARCHXXINCLUDES = -I. ${patsubst %,-isystem "${shell cygpath -w %}",$(GLOBAL_SYSTEM_CXX_INCLUDES)} \
+	${patsubst %,-I"${shell cygpath -w %}",$(GLOBAL_CXX_INCLUDES)}
   ARCHSCRIPT = -T "${shell cygpath -w $(TOPDIR)/configs/$(CONFIG_ARCH_BOARD)/scripts/$(LDSCRIPT)}"
   MAXOPTIMIZATION = -O2
 else
   # Linux/Cygwin-native toolchain
   MKDEP = $(TOPDIR)/tools/mkdeps.sh
-  ARCHINCLUDES = -I. -isystem $(TOPDIR)/include
-  ARCHXXINCLUDES = -I. -isystem $(TOPDIR)/include -isystem $(TOPDIR)/include/cxx
+  ARCHINCLUDES = -I. ${patsubst %,-isystem %,$(GLOBAL_SYSTEM_INCLUDES)} ${patsubst %,-I%,$(GLOBAL_INCLUDES)}
+  ARCHXXINCLUDES = -I. ${patsubst %,-isystem %,$(GLOBAL_SYSTEM_CXX_INCLUDES)} ${patsubst %,-I%,$(GLOBAL_CXX_INCLUDES)}
   ARCHSCRIPT = -T$(TOPDIR)/configs/$(CONFIG_ARCH_BOARD)/scripts/$(LDSCRIPT)
 endif
 

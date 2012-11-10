@@ -4,6 +4,8 @@
 #   Copyright (C) 2009 Gregory Nutt. All rights reserved.
 #   Author: Gregory Nutt <gnutt@nuttx.org>
 #
+#	Copyright (C) 2012 Freddie Chopin <freddie.chopin@gmail.com>
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
 # are met:
@@ -35,6 +37,7 @@
 
 include ${TOPDIR}/.config
 include ${TOPDIR}/tools/Config.mk
+include ${TOPDIR}/Includes.mk
 
 # The default value for CROSSDEV can be overridden from the make command line:
 #   make                         -- Will build for the devkitARM toolchain
@@ -58,8 +61,8 @@ ARCHCCMAJOR		= ${shell echo $(ARCHCCVERSION) | cut -d'.' -f1}
 ifeq ($(CROSSDEV),arm-nuttx-elf-)
   MKDEP			= $(TOPDIR)/tools/mkdeps.sh
   ARCHCPUFLAGS		= -mtune=cortex-m3 -march=armv7-m -mfloat-abi=soft
-  ARCHINCLUDES		= -I. -isystem $(TOPDIR)/include
-  ARCHXXINCLUDES	= -I. -isystem $(TOPDIR)/include -isystem $(TOPDIR)/include/cxx
+  ARCHINCLUDES = -I. ${patsubst %,-isystem %,$(GLOBAL_SYSTEM_INCLUDES)} ${patsubst %,-I%,$(GLOBAL_INCLUDES)}
+  ARCHXXINCLUDES = -I. ${patsubst %,-isystem %,$(GLOBAL_SYSTEM_CXX_INCLUDES)} ${patsubst %,-I%,$(GLOBAL_CXX_INCLUDES)}
   ARCHSCRIPT		= -T$(TOPDIR)/configs/$(CONFIG_ARCH_BOARD)/scripts/ld.script
   MAXOPTIMIZATION	= -Os
 else
@@ -68,8 +71,10 @@ else
   DIRUNLINK		= $(TOPDIR)/tools/unlink.sh
   MKDEP			= $(TOPDIR)/tools/mknulldeps.sh
   ARCHCPUFLAGS		= -mcpu=cortex-m3 -mthumb -mfloat-abi=soft
-  ARCHINCLUDES		= -I. -isystem "${shell cygpath -w $(TOPDIR)/include}"
-  ARCHXXINCLUDES	= -I. -isystem "${shell cygpath -w $(TOPDIR)/include}" -isystem "${shell cygpath -w $(TOPDIR)/include/cxx}"
+  ARCHINCLUDES = -I. ${patsubst %,-isystem "${shell cygpath -w %}",$(GLOBAL_SYSTEM_INCLUDES)} \
+	${patsubst %,-I"${shell cygpath -w %}",$(GLOBAL_INCLUDES)}
+  ARCHXXINCLUDES = -I. ${patsubst %,-isystem "${shell cygpath -w %}",$(GLOBAL_SYSTEM_CXX_INCLUDES)} \
+	${patsubst %,-I"${shell cygpath -w %}",$(GLOBAL_CXX_INCLUDES)}
   ARCHSCRIPT		= -T "${shell cygpath -w $(TOPDIR)/configs/$(CONFIG_ARCH_BOARD)/scripts/ld.script}"
   MAXOPTIMIZATION	= -O2
 endif
