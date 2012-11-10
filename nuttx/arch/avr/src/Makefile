@@ -35,7 +35,7 @@
 
 -include $(TOPDIR)/.config
 -include $(TOPDIR)/Make.defs
--include chip/Make.defs
+-include $(CHIP_SRC)/Make.defs
 
 ARCH_SRCDIR = $(TOPDIR)/arch/$(CONFIG_ARCH)/src
 ifeq ($(CONFIG_ARCH_AVR32),y)
@@ -46,13 +46,13 @@ endif
 
 ifeq ($(WINTOOL),y)
   NUTTX = "${shell cygpath -w $(TOPDIR)/nuttx}"
-  INCLUDES += -I "${shell cygpath -w $(ARCH_SRCDIR)/chip}"
+  INCLUDES += -I "${shell cygpath -w $(CHIP_SRC)}"
   INCLUDES += -I "${shell cygpath -w $(ARCH_SRCDIR)/common}"
   INCLUDES += -I "${shell cygpath -w $(ARCH_SRCDIR)/$(ARCH_SUBDIR)}"
   INCLUDES += -I "${shell cygpath -w $(TOPDIR)/sched}"
 else
   NUTTX = "$(TOPDIR)/nuttx"
-  INCLUDES += -I "$(ARCH_SRCDIR)/chip"
+  INCLUDES += -I "$(CHIP_SRC)"
   INCLUDES += -I "$(ARCH_SRCDIR)/common"
   INCLUDES += -I "$(ARCH_SRCDIR)/$(ARCH_SUBDIR)"
   INCLUDES += -I "$(TOPDIR)/sched"
@@ -106,7 +106,7 @@ LDLIBS = $(patsubst %.a,%,$(patsubst lib%,-l%,$(LINKLIBS)))
 
 LIBGCC = "${shell $(CC) $(ARCHCPUFLAGS) -print-libgcc-file-name}"
 
-VPATH = chip:common:$(ARCH_SUBDIR)
+VPATH = $(CHIP_SRC):common:$(ARCH_SUBDIR)
 
 all: $(HEAD_OBJ) libarch$(LIBEXT)
 
@@ -144,11 +144,11 @@ export_head: $(BOARD_SRC)/libboard$(LIBEXT) $(HEAD_OBJ)
 
 # Dependencies
 
-.depend: Makefile chip/Make.defs $(SRCS)
+.depend: Makefile $(CHIP_SRC)/Make.defs $(SRCS)
 ifneq ($(BOARD_SRC),)
 	$(Q) $(MAKE) -C $(BOARD_SRC) TOPDIR="$(TOPDIR)" depend
 endif
-	$(Q) $(MKDEP) --dep-path chip --dep-path common --dep-path $(ARCH_SUBDIR) \
+	$(Q) $(MKDEP) --dep-path $(CHIP_SRC) --dep-path common --dep-path $(ARCH_SUBDIR) \
 	 $(CC) -- $(CFLAGS) -- $(SRCS) >Make.dep
 	$(Q) touch $@
 

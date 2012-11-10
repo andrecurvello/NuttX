@@ -37,7 +37,7 @@
 # Makefile fragments
 
 -include $(TOPDIR)/Make.defs
--include chip/Make.defs
+-include $(CHIP_SRC)/Make.defs
 -include $(BOARD_SRC)/Make.defs
 
 ############################################################################

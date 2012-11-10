@@ -37,7 +37,7 @@
 # Tools
 # CFLAGS, CPPFLAGS, ASFLAGS, LDFLAGS are set in $(TOPDIR)/Make.defs
 
-CFLAGS += -I$(ARCH_SRCDIR)/chip -I$(ARCH_SRCDIR)/common -I$(TOPDIR)/sched
+CFLAGS += -I$(CHIP_SRC) -I$(ARCH_SRCDIR)/common -I$(TOPDIR)/sched
 CPPFLAGS += -D__ASSEMBLY__
 
 ############################################################################
@@ -70,7 +70,7 @@ DEPSRCS = $(CSRCS)
 
 ARCH_SRCDIR = $(TOPDIR)/arch/$(CONFIG_ARCH)/src
 
-VPATH = chip:common:$(BOARD_SRC)
+VPATH = $(CHIP_SRC):common:$(BOARD_SRC)
 
 # Libraries
 
@@ -226,11 +226,11 @@ export_head: $(BOARD_SRC)/libboard$(LIBEXT) $(HEAD_OBJ)
 
 # Build dependencies
 
-.depend: Makefile up_mem.h asm_mem.h chip/Make.defs $(DEPSRCS)
+.depend: Makefile up_mem.h asm_mem.h $(CHIP_SRC)/Make.defs $(DEPSRCS)
 	@if [ -e $(BOARD_SRC)/Makefile ]; then \
 		$(MAKE) -C $(BOARD_SRC) TOPDIR="$(TOPDIR)" depend ; \
 	fi
-	@$(MKDEP) --dep-path chip --dep-path common $(CC) -- $(CFLAGS) -- $(DEPSRCS) >Make.dep
+	@$(MKDEP) --dep-path $(CHIP_SRC) --dep-path common $(CC) -- $(CFLAGS) -- $(DEPSRCS) >Make.dep
 	@touch $@
 
 depend: .depend

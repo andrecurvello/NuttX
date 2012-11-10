@@ -34,7 +34,7 @@
 ############################################################################
 
 -include $(TOPDIR)/Make.defs
--include chip/Make.defs
+-include $(CHIP_SRC)/Make.defs
 
 COMPILER = ${shell basename $(CC)}
 ARCHSRCDIR = $(TOPDIR)/arch/$(CONFIG_ARCH)/src
@@ -65,7 +65,7 @@ COBJS = $(CSRCS:.c=$(OBJEXT))
 DEPSRCS = $(SSRCS) $(CSRCS)
 OBJS = $(AOBJS) $(COBJS)
 
-VPATH = chip:common
+VPATH = $(CHIP_SRC):common
 
 all: $(HEAD_OBJ) libarch$(LIBEXT)
 
@@ -112,11 +112,11 @@ nuttx$(EXEEXT): $(HEAD_OBJ) $(BOARD_SRC)/libboard$(LIBEXT) nuttx.linkcmd
 	@echo "LD:  nuttx.hex"
 	@$(LD) $(LDFLAGS)
 
-.depend: Makefile chip/Make.defs $(DEPSRCS)
+.depend: Makefile $(CHIP_SRC)/Make.defs $(DEPSRCS)
 	@if [ -e $(BOARD_SRC)/Makefile ]; then \
 		$(MAKE) -C $(BOARD_SRC) TOPDIR="$(TOPDIR)" depend ; \
 	fi
-	@$(MKDEP) --dep-path chip --dep-path common $(CC) -- $(CFLAGS) -- $(DEPSRCS) >Make.dep
+	@$(MKDEP) --dep-path $(CHIP_SRC) --dep-path common $(CC) -- $(CFLAGS) -- $(DEPSRCS) >Make.dep
 	@touch $@
 
 # This is part of the top-level export target

@@ -49,7 +49,7 @@ SRCS		= $(ASRCS) $(CSRCS)
 OBJS		= $(AOBJS) $(COBJS)
 
 ARCH_SRCDIR	= $(TOPDIR)/arch/$(CONFIG_ARCH)/src
-CFLAGS		+= -I$(ARCH_SRCDIR)/chip -I$(ARCH_SRCDIR)/common -I$(ARCH_SRCDIR)/arm
+CFLAGS		+= -I$(CHIP_SRC) -I$(ARCH_SRCDIR)/common -I$(ARCH_SRCDIR)/arm
 
 all: libboard$(LIBEXT)
 

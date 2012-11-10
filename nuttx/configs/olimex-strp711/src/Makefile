@@ -37,12 +37,12 @@
 
 ARCH_SRCDIR	= $(TOPDIR)/arch/$(CONFIG_ARCH)/src
 ifeq ($(WINTOOL),y)
-  CFLAGS	+= -I "${shell cygpath -w $(ARCH_SRCDIR)/chip}" \
+  CFLAGS	+= -I "${shell cygpath -w $(CHIP_SRC)}" \
   		   -I "${shell cygpath -w $(ARCH_SRCDIR)/common}" \
   		   -I "${shell cygpath -w $(ARCH_SRCDIR)/arm}" \
   		   -I "${shell cygpath -w $(ARCH_SRCDIR)/sched}"
 else
-  CFLAGS	+= -I$(ARCH_SRCDIR)/chip -I$(ARCH_SRCDIR)/common -I$(ARCH_SRCDIR)/arm -I$(TOPDIR)/sched
+  CFLAGS	+= -I$(CHIP_SRC) -I$(ARCH_SRCDIR)/common -I$(ARCH_SRCDIR)/arm -I$(TOPDIR)/sched
 endif
 
 ASRCS		= 

@@ -64,12 +64,12 @@ endif
 
 ifeq ($(WINTOOL),y)
   CFLAGS	+= -I "${shell cygpath -w $(TOPDIR)/sched}"
-  CFLAGS	+= -I "${shell cygpath -w $(ARCH_SRCDIR)/chip}" 
+  CFLAGS	+= -I "${shell cygpath -w $(CHIP_SRC)}" 
   CFLAGS	+= -I "${shell cygpath -w $(ARCH_SRCDIR)/common}" 
   CFLAGS	+= -I "${shell cygpath -w $(ARCH_SRCDIR)/$(ARCH_SUBDIR)}"
 else
   CFLAGS	+= -I "$(TOPDIR)/sched"
-  CFLAGS	+= -I "$(ARCH_SRCDIR)/chip"
+  CFLAGS	+= -I "$(CHIP_SRC)"
   CFLAGS	+= -I "$(ARCH_SRCDIR)/common" 
   CFLAGS	+= -I "$(ARCH_SRCDIR)/$(ARCH_SUBDIR)"
 endif
