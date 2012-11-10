@@ -39,7 +39,7 @@
 # Board-specific directory, board library, and application library
 
 PASS1_SRCDIR = arch/$(CONFIG_ARCH)/src
-PASS1_BOARDDIR = $(PASS1_SRCDIR)/board
+PASS1_BOARDDIR = $(BOARD_SRC)
 PASS1_LIBBOARD = $(PASS1_BOARDDIR)/libboard$(LIBEXT)
 
 # Where is the application library?

@@ -65,6 +65,8 @@ ARCH_SRC = $(ARCH_DIR)/src
 ARCH_INC = $(ARCH_DIR)/include
 BOARD_DIR = configs/$(CONFIG_ARCH_BOARD)
 
+export BOARD_SRC = $(TOPDIR)/configs/$(CONFIG_ARCH_BOARD)/src
+
 # Add-on directories.  These may or may not be in place in the
 # NuttX source tree (they must be specifically installed)
 #
@@ -372,12 +374,6 @@ include/arch/board: include/arch Make.defs include/arch
 	@echo "LN: include/arch/board -> $(TOPDIR)/$(BOARD_DIR)/include"
 	$(Q) $(DIRLINK) $(TOPDIR)/$(BOARD_DIR)/include include/arch/board
 
-# Link the configs/<board-name>/src dir to arch/<arch-name>/src/board
-
-$(ARCH_SRC)/board: Make.defs
-	@echo "LN: $(ARCH_SRC)/board -> $(TOPDIR)/$(BOARD_DIR)/src"
-	$(Q) $(DIRLINK) $(TOPDIR)/$(BOARD_DIR)/src $(ARCH_SRC)/board
-
 # Link arch/<arch-name>/include/<chip-name> to arch/<arch-name>/include/chip
 
 $(ARCH_SRC)/chip: Make.defs
@@ -394,7 +390,7 @@ ifneq ($(CONFIG_ARCH_CHIP),)
 	$(Q) $(DIRLINK) $(TOPDIR)/$(ARCH_INC)/$(CONFIG_ARCH_CHIP) include/arch/chip
 endif
 
-dirlinks: include/arch include/arch/board include/arch/chip $(ARCH_SRC)/board $(ARCH_SRC)/chip include/apps
+dirlinks: include/arch include/arch/board include/arch/chip $(ARCH_SRC)/chip include/apps
 
 # context
 #
@@ -421,7 +417,6 @@ clean_context:
 	$(Q) $(DIRUNLINK) include/arch/board
 	$(Q) $(DIRUNLINK) include/arch/chip
 	$(Q) $(DIRUNLINK) include/arch
-	$(Q) $(DIRUNLINK) $(ARCH_SRC)/board
 	$(Q) $(DIRUNLINK) $(ARCH_SRC)/chip
 	$(Q) $(DIRUNLINK) include/apps
 

@@ -65,13 +65,11 @@ COBJS = $(CSRCS:.c=$(OBJEXT))
 DEPSRCS = $(SSRCS) $(CSRCS)
 OBJS = $(AOBJS) $(COBJS)
 
-BOARDDIR = $(TOPDIR)/arch/$(CONFIG_ARCH)/src/board
-
 VPATH = chip:common
 
 all: $(HEAD_OBJ) libarch$(LIBEXT)
 
-.PHONY: board/libboard$(LIBEXT)
+.PHONY: $(BOARD_SRC)/libboard$(LIBEXT)
 
 ifeq ($(COMPILER),zneocc.exe)
 $(ASRCS) $(HEAD_ASRC): %$(ASMEXT): %.S
@@ -92,8 +90,8 @@ $(COBJS): %$(OBJEXT): %.c
 libarch$(LIBEXT): $(OBJS)
 	$(call ARCHIVE, $@, "$(OBJS)")
 
-board/libboard$(LIBEXT):
-	@$(MAKE) -C board TOPDIR="$(TOPDIR)" libboard$(LIBEXT) EXTRADEFINES=$(EXTRADEFINES)
+$(BOARD_SRC)/libboard$(LIBEXT):
+	@$(MAKE) -C $(BOARD_SRC) TOPDIR="$(TOPDIR)" libboard$(LIBEXT) EXTRADEFINES=$(EXTRADEFINES)
 
 ifeq ($(COMPILER),zneocc.exe)
 nuttx.linkcmd: $(LINKCMDTEMPLATE)
@@ -103,27 +101,27 @@ nuttx.linkcmd: $(LINKCMDTEMPLATE)
 	@( for lib in $(LINKLIBS); do \
 		echo "  \"`cygpath -w $(TOPDIR)/lib/$${lib}`\", \\" >>nuttx.linkcmd; \
 	done ; )
-	@echo "  \"${shell cygpath -w $(ARCHSRCDIR)/board/libboard$(LIBEXT)}\", \\"  >>nuttx.linkcmd
+	@echo "  \"${shell cygpath -w $(BOARD_SRC)/libboard$(LIBEXT)}\", \\"  >>nuttx.linkcmd
 	@echo "  \"${shell cygpath -w $(ZDSSTDLIBDIR)/chelpld$(LIBEXT)}\", \\"  >>nuttx.linkcmd
 	@echo "  \"${shell cygpath -w $(ZDSSTDLIBDIR)/fpld$(LIBEXT)}\""  >>nuttx.linkcmd
 else
 nuttx.linkcmd:
 endif
 
-nuttx$(EXEEXT): $(HEAD_OBJ) board/libboard$(LIBEXT) nuttx.linkcmd
+nuttx$(EXEEXT): $(HEAD_OBJ) $(BOARD_SRC)/libboard$(LIBEXT) nuttx.linkcmd
 	@echo "LD:  nuttx.hex"
 	@$(LD) $(LDFLAGS)
 
 .depend: Makefile chip/Make.defs $(DEPSRCS)
-	@if [ -e board/Makefile ]; then \
-		$(MAKE) -C board TOPDIR="$(TOPDIR)" depend ; \
+	@if [ -e $(BOARD_SRC)/Makefile ]; then \
+		$(MAKE) -C $(BOARD_SRC) TOPDIR="$(TOPDIR)" depend ; \
 	fi
 	@$(MKDEP) --dep-path chip --dep-path common $(CC) -- $(CFLAGS) -- $(DEPSRCS) >Make.dep
 	@touch $@
 
 # This is part of the top-level export target
 
-export_head: board/libboard$(LIBEXT) $(HEAD_OBJ)
+export_head: $(BOARD_SRC)/libboard$(LIBEXT) $(HEAD_OBJ)
 	@if [ -d "$(EXPORT_DIR)/startup" ]; then \
 		cp -f $(HEAD_OBJ) "$(EXPORT_DIR)/startup"; \
 	 else \
@@ -136,8 +134,8 @@ export_head: board/libboard$(LIBEXT) $(HEAD_OBJ)
 depend: .depend
 
 clean:
-	@if [ -e board/Makefile ]; then \
-		$(MAKE) -C board TOPDIR="$(TOPDIR)" clean ; \
+	@if [ -e $(BOARD_SRC)/Makefile ]; then \
+		$(MAKE) -C $(BOARD_SRC) TOPDIR="$(TOPDIR)" clean ; \
 	fi
 	@rm -f libarch$(LIBEXT) *~ .*.swp
 ifeq ($(COMPILER),zneocc.exe)
@@ -146,8 +144,8 @@ endif
 	$(call CLEAN)
 
 distclean: clean
-	@if [ -e board/Makefile ]; then \
-		$(MAKE) -C board TOPDIR="$(TOPDIR)" distclean ; \
+	@if [ -e $(BOARD_SRC)/Makefile ]; then \
+		$(MAKE) -C $(BOARD_SRC) TOPDIR="$(TOPDIR)" distclean ; \
 	fi
 	@rm -f Make.dep .depend
 

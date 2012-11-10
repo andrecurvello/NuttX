@@ -68,8 +68,6 @@ TESTOBJS = $(TESTSRCS:.c=$(OBJEXT))
 TESTLINKOBJS = up_head$(OBJEXT)
 TESTEXTRAOBJS = up_savecontext$(OBJEXT) up_restorecontext$(OBJEXT)
 
-BOARDDIR = $(TOPDIR)/arch/$(CONFIG_ARCH)/src/board
-
 IRAM_SIZE = 0x100
 DEF_STACK_BASE = 0x24
 LDFLAGS += --model-large --nostdlib \
@@ -107,7 +105,7 @@ STACK_BASE = ${shell \
 
 all: up_head$(OBJEXT) libarch$(LIBEXT)
 
-.PHONY: board/libboard$(LIBEXT)
+.PHONY: $(BOARD_SRC)/libboard$(LIBEXT)
 
 $(ASRCS) $(LINKASRCS): %$(ASMEXT): %.S
 	$(CPP) -P $(CPPFLAGS) $< -o $@
@@ -162,16 +160,16 @@ $(SDCCLIBDIR)/libmysdcc.lib: $(SDCCLIBDIR)/libsdcc.lib
 		> libmysdcc.lib
 	@mv -f libmysdcc.lib $(SDCCLIBDIR)/libmysdcc.lib
 
-# This builds the libboard library in the board/ subdirectory 
+# This builds the libboard library in the $(BOARD_SRC)/ directory 
 
-board/libboard$(LIBEXT):
-	$(MAKE) -C board TOPDIR=$(TOPDIR) libboard$(LIBEXT) EXTRADEFINES=$(EXTRADEFINES)
+$(BOARD_SRC)/libboard$(LIBEXT):
+	$(MAKE) -C $(BOARD_SRC) TOPDIR=$(TOPDIR) libboard$(LIBEXT) EXTRADEFINES=$(EXTRADEFINES)
 
 # This target builds the final executable
 
-pass1.hex: up_mem.h $(SDCCLIBDIR)/libmysdcc.lib $(LINKOBJS) board/libboard$(LIBEXT)
+pass1.hex: up_mem.h $(SDCCLIBDIR)/libmysdcc.lib $(LINKOBJS) $(BOARD_SRC)/libboard$(LIBEXT)
 	@echo "LD:  $@"
-	@$(CC) $(LDFLAGS) $(LDPATHS) -L$(BOARDDIR) $(SDCCPATH) $(LINKOBJS) \
+	@$(CC) $(LDFLAGS) $(LDPATHS) -L$(BOARD_SRC) $(SDCCPATH) $(LINKOBJS) \
 		$(LDLIBS) -llibboard$(LIBEXT) $(SDCCLIBS) -o $@
 	@rm -f up_mem.h
 	@rm -f up_allocateheap$(OBJEXT) libarch$(LIBEXT)
@@ -179,7 +177,7 @@ pass1.hex: up_mem.h $(SDCCLIBDIR)/libmysdcc.lib $(LINKOBJS) board/libboard$(LIBE
 
 nuttx.hex: up_mem.h $(SDCCLIBDIR)/libmysdcc.lib $(LINKOBJS)
 	@echo "LD:  $@"
-	@$(CC) $(LDFLAGS) $(LDPATHS) -L$(BOARDDIR) $(SDCCPATH) $(LINKOBJS) \
+	@$(CC) $(LDFLAGS) $(LDPATHS) -L$(BOARD_SRC) $(SDCCPATH) $(LINKOBJS) \
 		$(LDLIBS) -llibboard$(LIBEXT) $(SDCCLIBS) -o $@
 
 nuttx$(EXEEXT): pass1.hex nuttx.hex
@@ -189,7 +187,7 @@ nuttx$(EXEEXT): pass1.hex nuttx.hex
 
 # This is part of the top-level export target
 
-export_head: board/libboard$(LIBEXT) p_head$(OBJEXT)
+export_head: $(BOARD_SRC)/libboard$(LIBEXT) p_head$(OBJEXT)
 	@if [ -d "$(EXPORT_DIR)/startup" ]; then \
 		cp -f up_head$(OBJEXT) "$(EXPORT_DIR)/startup"; \
 	 else \
@@ -209,8 +207,8 @@ irqtest:
 # Build dependencies
 
 .depend: Makefile up_mem.h $(DEPSRCS)
-	@if [ -e board/Makefile ]; then \
-		$(MAKE) -C board TOPDIR=$(TOPDIR) depend ; \
+	@if [ -e $(BOARD_SRC)/Makefile ]; then \
+		$(MAKE) -C $(BOARD_SRC) TOPDIR=$(TOPDIR) depend ; \
 	fi	
 	@$(MKDEP) $(CC) -- $(CFLAGS) -- $(SRCS) >Make.dep
 	@touch $@
@@ -218,15 +216,15 @@ irqtest:
 depend: .depend
 
 clean:
-	@if [ -e board/Makefile ]; then \
-		$(MAKE) -C board TOPDIR=$(TOPDIR) clean ; \
+	@if [ -e $(BOARD_SRC)/Makefile ]; then \
+		$(MAKE) -C $(BOARD_SRC) TOPDIR=$(TOPDIR) clean ; \
 	fi
 	@rm -f libarch$(LIBEXT) up_mem.h *~ .*.swp
 	$(call CLEAN)
 
 distclean: clean
-	@if [ -e board/Makefile ]; then \
-		$(MAKE) -C board TOPDIR=$(TOPDIR) distclean ; \
+	@if [ -e $(BOARD_SRC)/Makefile ]; then \
+		$(MAKE) -C $(BOARD_SRC) TOPDIR=$(TOPDIR) distclean ; \
 	fi
 	rm -f Make.dep .depend
 

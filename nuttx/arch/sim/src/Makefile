@@ -128,19 +128,19 @@ endif
 
 LINKLIBS ?=
 LIBPATHS += -L"(TOPDIR)/lib"
-LIBPATHS += -L"$(BOARDDIR)"
+LIBPATHS += -L"$(BOARD_SRC)"
 LDLIBS = $(patsubst %.a,%,$(patsubst lib%,-l%,$(LINKLIBS)))
 
 # Add the board-specific library and directory
 
-LDPATHS += -L board 
+LDPATHS += -L $(BOARD_SRC) 
 LDLIBS += -lboard
 
 # Make targets begin here
 
 all: up_head$(OBJEXT) libarch$(LIBEXT)
 
-.PHONY: board/libboard$(LIBEXT) export_head clean distclean cleanrel depend
+.PHONY: $(BOARD_SRC)/libboard$(LIBEXT) export_head clean distclean cleanrel depend
 
 $(AOBJS): %$(OBJEXT): %.S
 	$(call ASSEMBLE, $<, $@)
@@ -161,8 +161,8 @@ libarch$(LIBEXT): $(NUTTXOBJS)
 # the simulation.  However, this is a good place to keep parts of the simulation
 # that are not hardware-related.
 
-board/libboard$(LIBEXT):
-	$(Q) $(MAKE) -C board TOPDIR="$(TOPDIR)" libboard$(LIBEXT) EXTRADEFINES=$(EXTRADEFINES)
+$(BOARD_SRC)/libboard$(LIBEXT):
+	$(Q) $(MAKE) -C $(BOARD_SRC) TOPDIR="$(TOPDIR)" libboard$(LIBEXT) EXTRADEFINES=$(EXTRADEFINES)
 
 # A partially linked object containing only NuttX code (no interface to host OS)
 # Change the names of most symbols that conflict with libc symbols.
@@ -176,7 +176,7 @@ GNU/Linux-names.dat: GNU nuttx-names.dat
 Cygwin-names.dat: nuttx-names.dat
 	$(Q) cat $^ | sed -e "s/^/_/g" >$@
 
-nuttx.rel : libarch$(LIBEXT) board/libboard$(LIBEXT) $(HOSTOS)-names.dat $(LINKOBJS)
+nuttx.rel : libarch$(LIBEXT) $(BOARD_SRC)/libboard$(LIBEXT) $(HOSTOS)-names.dat $(LINKOBJS)
 	$(Q) echo "LD:  nuttx.rel"
 	$(Q) $(LD) -r $(LDLINKFLAGS) $(LDPATHS) $(EXTRA_LIBPATHS) -o $@ $(REQUIREDOBJS) --start-group $(LDLIBS) $(EXTRA_LIBS) --end-group
 	$(Q) $(OBJCOPY) --redefine-syms=$(HOSTOS)-names.dat $@
@@ -194,7 +194,7 @@ nuttx$(EXEEXT): cleanrel nuttx.rel $(HOSTOBJS)
 
 # This is part of the top-level export target
 
-export_head: board/libboard$(LIBEXT) up_head.o $(HOSTOBJS)
+export_head: $(BOARD_SRC)/libboard$(LIBEXT) up_head.o $(HOSTOBJS)
 	cp up_head.o $(HOSTOBJS) ${EXPORT_DIR}/startup
 	cp nuttx-names.dat ${EXPORT_DIR}/libs
 	echo main NXmain >> ${EXPORT_DIR}/libs/nuttx-names.dat
@@ -211,15 +211,15 @@ cleanrel:
 	$(Q) rm -f nuttx.rel GNU/Linux-names.dat Cygwin-names.dat
 
 clean: cleanrel
-	$(Q) if [ -e board/Makefile ]; then \
-		$(MAKE) -C board TOPDIR="$(TOPDIR)" clean ; \
+	$(Q) if [ -e $(BOARD_SRC)/Makefile ]; then \
+		$(MAKE) -C $(BOARD_SRC) TOPDIR="$(TOPDIR)" clean ; \
 	fi
 	$(Q) rm -f nuttx.rel libarch$(LIBEXT) *~ .*.swp
 	$(call CLEAN)
 
 distclean: clean
-	$(Q) if [ -e board/Makefile ]; then \
-		$(MAKE) -C board TOPDIR="$(TOPDIR)" distclean ; \
+	$(Q) if [ -e $(BOARD_SRC)/Makefile ]; then \
+		$(MAKE) -C $(BOARD_SRC) TOPDIR="$(TOPDIR)" distclean ; \
 	fi
 	$(Q) rm -f Make.dep .depend
 	$(Q) rm -rf GNU
