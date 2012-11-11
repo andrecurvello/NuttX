@@ -44,7 +44,7 @@
 
 /* Include the chip capabilities file */
 
-#include <arch/lpc43xx/chip.h>
+#include <arch/chip/chip.h>
 
 /* For each chip supported in chip.h, the following are provided to customize the
  * environment for the specific LPC43XX chip:

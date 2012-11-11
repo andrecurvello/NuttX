@@ -35,16 +35,22 @@
 include ${TOPDIR}/.config
 include ${TOPDIR}/tools/Config.mk
 
+# apps dir may be overriden by .config file, the string needs to be unquoted in that case
 ifeq ($(CONFIG_APPS_DIR),)
 	CONFIG_APPS_DIR_UNQUOTED = ../apps
 else
 	CONFIG_APPS_DIR_UNQUOTED = ${patsubst "%",%,${strip $(CONFIG_APPS_DIR)}}
 endif
 
+# ther might be no chip directory for some architectures
+ifneq ($(CONFIG_ARCH_CHIP),)
+	CONFIG_ARCH_CHIP_INC = $(TOPDIR)/arch/$(CONFIG_ARCH)/include/$(CONFIG_ARCH_CHIP)
+endif
+
 # folders included as "system" includes
-GLOBAL_SYSTEM_INCLUDES = $(TOPDIR)/include $(TOPDIR)/$(CONFIG_APPS_DIR_UNQUOTED)/include
+GLOBAL_SYSTEM_INCLUDES = $(TOPDIR)/include $(TOPDIR)/$(CONFIG_APPS_DIR_UNQUOTED)/include $(CONFIG_ARCH_CHIP_INC)
 GLOBAL_SYSTEM_CXX_INCLUDES = $(GLOBAL_SYSTEM_INCLUDES) $(TOPDIR)/include/cxx
 
 # folder included in a standard way
 GLOBAL_INCLUDES =
-GLOBAL_CXX_INCLUDES =
+GLOBAL_CXX_INCLUDES = $(GLOBAL_INCLUDES)

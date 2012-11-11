@@ -44,7 +44,7 @@
 
 /* Include the chip capabilities file */
 
-#include <arch/stm32/chip.h>
+#include <arch/chip/chip.h>
 
 /* Include the chip pin configuration file */
 

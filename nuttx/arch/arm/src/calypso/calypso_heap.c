@@ -50,8 +50,8 @@
 #include <nuttx/arch.h>
 #include <arch/board/board.h>
 
-#include <arch/calypso/clock.h>
-#include <arch/calypso/timer.h>
+#include <arch/chip/clock.h>
+#include <arch/chip/timer.h>
 
 #include "up_arch.h"
 #include "up_internal.h"

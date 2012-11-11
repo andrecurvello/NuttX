@@ -46,7 +46,7 @@
 
 #include <nuttx/config.h>
 #include <nuttx/irq.h>
-#include <arch/stm32/chip.h>
+#include <arch/chip/chip.h>
 
 /************************************************************************************
  * Definitions
@@ -78,11 +78,11 @@
 #define STM32_IRQ_INTERRUPTS    (16) /* Vector number of the first external interrupt */
 
 #if defined(CONFIG_STM32_STM32F10XX)
-#  include <arch/stm32/stm32f10xxx_irq.h>
+#  include <arch/chip/stm32f10xxx_irq.h>
 #elif defined(CONFIG_STM32_STM32F20XX)
-#  include <arch/stm32/stm32f20xxx_irq.h>
+#  include <arch/chip/stm32f20xxx_irq.h>
 #elif defined(CONFIG_STM32_STM32F40XX)
-#  include <arch/stm32/stm32f40xxx_irq.h>
+#  include <arch/chip/stm32f40xxx_irq.h>
 #else
 #  error "Unsupported STM32 chip"
 #endif

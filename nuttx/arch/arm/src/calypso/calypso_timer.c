@@ -41,9 +41,9 @@
 #include <stdint.h>
 #include <nuttx/arch.h>
 
-#include <arch/calypso/defines.h>
-#include <arch/calypso/memory.h>
-#include <arch/calypso/timer.h>
+#include <arch/chip/defines.h>
+#include <arch/chip/memory.h>
+#include <arch/chip/timer.h>
 
 #include "up_arch.h"
 

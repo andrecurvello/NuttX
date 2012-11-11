@@ -38,8 +38,8 @@
 #include <nuttx/arch.h>
 #include <nuttx/irq.h>
 
-#include <arch/calypso/memory.h>
-#include <arch/calypso/armio.h>
+#include <arch/chip/memory.h>
+#include <arch/chip/armio.h>
 
 #include "up_arch.h"
 

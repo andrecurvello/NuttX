@@ -367,15 +367,7 @@ include/arch/board: include/arch Make.defs include/arch
 	@echo "LN: include/arch/board -> $(TOPDIR)/$(BOARD_DIR)/include"
 	$(Q) $(DIRLINK) $(TOPDIR)/$(BOARD_DIR)/include include/arch/board
 
-# Link arch/<arch-name>/src/<chip-name> to arch/<arch-name>/src/chip
-
-include/arch/chip: include/arch Make.defs
-ifneq ($(CONFIG_ARCH_CHIP),)
-	@echo "LN: include/arch/chip -> $(TOPDIR)/$(ARCH_INC)/$(CONFIG_ARCH_CHIP)"
-	$(Q) $(DIRLINK) $(TOPDIR)/$(ARCH_INC)/$(CONFIG_ARCH_CHIP) include/arch/chip
-endif
-
-dirlinks: include/arch include/arch/board include/arch/chip
+dirlinks: include/arch include/arch/board
 
 # context
 #
@@ -400,7 +392,6 @@ clean_context:
 	$(Q) rm -f include/math.h
 	$(Q) rm -f include/stdarg.h
 	$(Q) $(DIRUNLINK) include/arch/board
-	$(Q) $(DIRUNLINK) include/arch/chip
 	$(Q) $(DIRUNLINK) include/arch
 
 # check_context

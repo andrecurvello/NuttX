@@ -42,10 +42,10 @@
 #include <stdio.h>
 
 //#define DEBUG
-#include <arch/calypso/debug.h>
+#include <arch/chip/debug.h>
 
-#include <arch/calypso/memory.h>
-#include <arch/calypso/clock.h>
+#include <arch/chip/memory.h>
+#include <arch/chip/clock.h>
 
 #include "up_arch.h"
 
