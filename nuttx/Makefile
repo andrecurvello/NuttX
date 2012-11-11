@@ -361,13 +361,7 @@ include/arch: Make.defs
 	@echo "LN: include/arch -> $(TOPDIR)/$(ARCH_DIR)/include"
 	$(Q) $(DIRLINK) $(TOPDIR)/$(ARCH_DIR)/include include/arch
 
-# Link the configs/<board-name>/include directory to include/arch/board
-
-include/arch/board: include/arch Make.defs include/arch
-	@echo "LN: include/arch/board -> $(TOPDIR)/$(BOARD_DIR)/include"
-	$(Q) $(DIRLINK) $(TOPDIR)/$(BOARD_DIR)/include include/arch/board
-
-dirlinks: include/arch include/arch/board
+dirlinks: include/arch
 
 # context
 #
@@ -391,7 +385,6 @@ clean_context:
 	$(Q) rm -f include/nuttx/version.h
 	$(Q) rm -f include/math.h
 	$(Q) rm -f include/stdarg.h
-	$(Q) $(DIRUNLINK) include/arch/board
 	$(Q) $(DIRUNLINK) include/arch
 
 # check_context
