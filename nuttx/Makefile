@@ -4,6 +4,8 @@
 #   Copyright (C) 2007-2012 Gregory Nutt. All rights reserved.
 #   Author: Gregory Nutt <gnutt@nuttx.org>
 #
+#	Copyright (C) 2012 Freddie Chopin <freddie.chopin@gmail.com>
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
 # are met:
@@ -352,16 +354,6 @@ include/nuttx/config.h: $(TOPDIR)/.config tools/mkconfig
 # Directories links.  Most of establishing the NuttX configuration involves
 # setting up symbolic links with 'generic' directory names to specific,
 # configured directories.
-#
-# Link the apps/include directory to include/apps
-
-include/apps: Make.defs
-ifneq ($(APPDIR),)
-	@echo "LN: include/apps -> $(APPDIR)/include"
-	$(Q) if [ -d $(TOPDIR)/$(APPDIR)/include ]; then \
-		$(DIRLINK) $(TOPDIR)/$(APPDIR)/include include/apps; \
-	fi
-endif
 
 # Link the arch/<arch-name>/include directory to include/arch
 
@@ -383,7 +375,7 @@ ifneq ($(CONFIG_ARCH_CHIP),)
 	$(Q) $(DIRLINK) $(TOPDIR)/$(ARCH_INC)/$(CONFIG_ARCH_CHIP) include/arch/chip
 endif
 
-dirlinks: include/arch include/arch/board include/arch/chip include/apps
+dirlinks: include/arch include/arch/board include/arch/chip
 
 # context
 #
@@ -410,7 +402,6 @@ clean_context:
 	$(Q) $(DIRUNLINK) include/arch/board
 	$(Q) $(DIRUNLINK) include/arch/chip
 	$(Q) $(DIRUNLINK) include/arch
-	$(Q) $(DIRUNLINK) include/apps
 
 # check_context
 #

@@ -32,8 +32,17 @@
 #
 ############################################################################
 
+include ${TOPDIR}/.config
+include ${TOPDIR}/tools/Config.mk
+
+ifeq ($(CONFIG_APPS_DIR),)
+	CONFIG_APPS_DIR_UNQUOTED = ../apps
+else
+	CONFIG_APPS_DIR_UNQUOTED = ${patsubst "%",%,${strip $(CONFIG_APPS_DIR)}}
+endif
+
 # folders included as "system" includes
-GLOBAL_SYSTEM_INCLUDES = $(TOPDIR)/include
+GLOBAL_SYSTEM_INCLUDES = $(TOPDIR)/include $(TOPDIR)/$(CONFIG_APPS_DIR_UNQUOTED)/include
 GLOBAL_SYSTEM_CXX_INCLUDES = $(GLOBAL_SYSTEM_INCLUDES) $(TOPDIR)/include/cxx
 
 # folder included in a standard way
