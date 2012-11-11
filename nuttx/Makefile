@@ -349,28 +349,13 @@ tools/mkconfig:
 include/nuttx/config.h: $(TOPDIR)/.config tools/mkconfig
 	$(Q) tools/mkconfig $(TOPDIR) > include/nuttx/config.h
 
-# dirlinks, and helpers
-#
-# Directories links.  Most of establishing the NuttX configuration involves
-# setting up symbolic links with 'generic' directory names to specific,
-# configured directories.
-
-# Link the arch/<arch-name>/include directory to include/arch
-
-include/arch: Make.defs
-	@echo "LN: include/arch -> $(TOPDIR)/$(ARCH_DIR)/include"
-	$(Q) $(DIRLINK) $(TOPDIR)/$(ARCH_DIR)/include include/arch
-
-dirlinks: include/arch
-
 # context
 #
 # The context target is invoked on each target build to assure that NuttX is
 # properly configured.  The basic configuration steps include creation of the
-# the config.h and version.h header files in the include/nuttx directory and
-# the establishment of symbolic links to configured directories.
+# the config.h and version.h header files in the include/nuttx directory.
 
-context: check_context include/nuttx/config.h include/nuttx/version.h include/math.h include/float.h include/stdarg.h dirlinks
+context: check_context include/nuttx/config.h include/nuttx/version.h include/math.h include/float.h include/stdarg.h
 	$(Q) for dir in $(CONTEXTDIRS) ; do \
 		$(MAKE) -C $$dir TOPDIR="$(TOPDIR)" context; \
 	done
@@ -378,14 +363,13 @@ context: check_context include/nuttx/config.h include/nuttx/version.h include/ma
 # clean_context
 #
 # This is part of the distclean target.  It removes all of the header files
-# and symbolic links created by the context target.
+# created by the context target.
 
 clean_context:
 	$(Q) rm -f include/nuttx/config.h
 	$(Q) rm -f include/nuttx/version.h
 	$(Q) rm -f include/math.h
 	$(Q) rm -f include/stdarg.h
-	$(Q) $(DIRUNLINK) include/arch
 
 # check_context
 #

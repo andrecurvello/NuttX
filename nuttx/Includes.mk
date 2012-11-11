@@ -44,12 +44,12 @@ endif
 
 # ther might be no chip directory for some architectures
 ifneq ($(CONFIG_ARCH_CHIP),)
-	CONFIG_ARCH_CHIP_INC = $(TOPDIR)/arch/$(CONFIG_ARCH)/include/$(CONFIG_ARCH_CHIP)
+	CONFIG_ARCH_CHIP_INC = $(TOPDIR)/arch/$(CONFIG_ARCH)/include/arch/$(CONFIG_ARCH_CHIP)
 endif
 
 # folders included as "system" includes
 GLOBAL_SYSTEM_INCLUDES = $(TOPDIR)/include $(TOPDIR)/$(CONFIG_APPS_DIR_UNQUOTED)/include $(CONFIG_ARCH_CHIP_INC) \
-	$(TOPDIR)/configs/$(CONFIG_ARCH_BOARD)/include
+	$(TOPDIR)/configs/$(CONFIG_ARCH_BOARD)/include $(TOPDIR)/arch/$(CONFIG_ARCH)/include
 GLOBAL_SYSTEM_CXX_INCLUDES = $(GLOBAL_SYSTEM_INCLUDES) $(TOPDIR)/include/cxx
 
 # folder included in a standard way
