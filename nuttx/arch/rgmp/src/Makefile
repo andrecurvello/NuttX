@@ -54,8 +54,8 @@ LINKOBJS    = $(LINKSRCS:.c=$(OBJEXT))
 
 LDFLAGS		+= -T$(RGMPLKSCPT)
 LDLIBS		= $(patsubst %.a,%,$(patsubst lib%,-l%,$(LINKLIBS)))
-LDPATHS		+= -L"$(TOPDIR)/lib -L$(RGMPLIBDIR)
-LDLIBS		+= -lrgmp $(shell $(CC) -print-libgcc-file-name)
+LIBPATHS		+= -L"$(TOPDIR)/lib" -L$(RGMPLIBDIR)
+LDLIBS		+= -lrgmp $(shell "$(CC)" -print-libgcc-file-name)
 
 all: libarch$(LIBEXT)
 
@@ -77,7 +77,7 @@ libarch$(LIBEXT): $(OBJS)
 
 nuttx$(EXEEXT): $(LINKOBJS)
 	@echo "LD:  nuttx$(EXEEXT)"
-	@$(LD) $(LDFLAGS) $(LDPATHS) $(LINKOBJS) --start-group $(LDLIBS) $(EXTRA_LIBS) --end-group -o $(TOPDIR)/$@
+	@$(LD) $(LDFLAGS) $(LIBPATHS) $(LINKOBJS) --start-group $(LDLIBS) $(EXTRA_LIBS) --end-group -o $(TOPDIR)/$@
 	@$(OBJDUMP) -S $(TOPDIR)/$@ > $(TOPDIR)/nuttx.asm
 	@$(NM) -n $(TOPDIR)/$@ > $(TOPDIR)/nuttx.sym
 	@$(OBJCOPY) -S -O binary $(TOPDIR)/$@ nuttx.img
@@ -90,7 +90,7 @@ export_head:
 # Dependencies
 
 .depend: Makefile $(SRCS) $(LINKSRCS)
-	@$(MKDEP) $(CC) -- $(CFLAGS) -- $(SRCS) $(LINKSRCS) >Make.dep
+	@$(MKDEP) "$(CC)" -- $(CFLAGS) -- $(SRCS) $(LINKSRCS) >Make.dep
 	@touch $@
 
 depend: .depend
