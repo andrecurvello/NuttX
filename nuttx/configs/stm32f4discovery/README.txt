@@ -89,14 +89,7 @@ GNU Toolchain Options
      because the dependencies are generated using Windows pathes which do not
      work with the Cygwin make.
 
-     Support has been added for making dependencies with the windows-native toolchains.
-     That support can be enabled by modifying your Make.defs file as follows:
-
-    -  MKDEP                = $(TOPDIR)/tools/mknulldeps.sh
-    +  MKDEP                = $(TOPDIR)/tools/mkdeps.sh --winpaths "$(TOPDIR)"
-
-     If you have problems with the dependency build (for example, if you are not
-     building on C:), then you may need to modify tools/mkdeps.sh
+       MKDEP                = $(TOPDIR)/tools/mknulldeps.sh
 
   The CodeSourcery Toolchain (2009q1)
   -----------------------------------
@@ -1091,8 +1084,10 @@ Where <subdir> is one of the following:
        b. Execute 'make menuconfig' in nuttx/ in order to start the
           reconfiguration process.
 
-    2. Default toolchain:
+    2. Default platform/toolchain:
 
+       CONFIG_HOST_WINDOWS=y         : Windows
+       CONFIG_WINDOWS_CYGWIN=y       : Cygwin environment on Windows
        CONFIG_STM32_CODESOURCERYW=y  : CodeSourcery under Windows
 
     3. By default, this project assumes that you are *NOT* using the DFU
@@ -1466,6 +1461,10 @@ Where <subdir> is one of the following:
       be performed in a Windows CMD shell. Here is a better shell than than the
       standard issue, CMD shell:  ConEmu which can be downloaded from:
       http://code.google.com/p/conemu-maximus5/
+
+       CONFIG_HOST_WINDOWS=y         : Windows
+       CONFIG_WINDOWS_NATIVE=y       : Native Windows environment
+       CONFIG_STM32_CODESOURCERYW=y  : CodeSourcery under Windows
 
       Build Tools.  The build still relies on some Unix-like commands.  I use
       the GNUWin32 tools that can be downloaded from http://gnuwin32.sourceforge.net/.

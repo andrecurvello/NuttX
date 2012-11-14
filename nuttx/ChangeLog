@@ -3608,3 +3608,18 @@
 	* configs/stm32f4discovery/winbuild:  This is a version of the standard
 	  NuttX OS test, but configured to build natively on Windows.  Its only
 	  real purpose is to very the native Windows build logic.
+	* tools/mkdeps.bat and tools/mkdeps.c:  mkdeps.bat is a failed attempt
+	  to leverage mkdeps.sh to CMD.exe.  It fails because the are certain
+	  critical CFLAG values that cannot be passed on the CMD.exe command line
+	  (line '=').  mkdeps.c is a work in progress that will, hopefully,
+	  replace both mkdeps.sh and mkdeps.bat.
+	* tools/Config.mk:  Centralize the definition of the scrpt that will be
+	  used to generated header file include paths for the compiler.  This
+	  needs to be centralized in order to support the Windows native build.
+	* tools/incdir.bat:  A replaced for tools/incdir.sh for use with the
+	  the Windows native build.
+	* Makefile.unix:  The existing top-level Makefile has been renamed
+	  Makefile.unix.
+	* Makefile:  This is a new top-level Makefile that just includes
+	  either Makefile.unix or Makefile.win
+
