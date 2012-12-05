@@ -1,0 +1,78 @@
+#
+# file: common.defs
+#
+# common defines that can be used by tup and ARM toolchain, this is an extraction from Make.defs of BSP
+#
+# author: Freddie Chopin, http://www.distortec.com http://www.freddiechopin.info
+# date: 2012-12-05
+#
+
+CROSSDEV = arm-none-eabi-
+ARCHCPUFLAGS = -mcpu=cortex-m3 -mthumb -mfloat-abi=soft
+MAXOPTIMIZATION = -Os
+
+# C++ language standard ("c++98", "gnu++98" - default, "c++0x", "gnu++0x")
+CXX_STD = gnu++0x
+
+# C language standard ("c89" / "iso9899:1990", "iso9899:199409",
+# "c99" / "iso9899:1999", "gnu89" - default, "gnu99")
+C_STD = gnu99
+
+DIRLINK = $(TOPDIR)/tools/winlink.sh
+DIRUNLINK = $(TOPDIR)/tools/unlink.sh
+MKDEP = $(TOPDIR)/tools/mkdeps.sh
+ARCHINCLUDES = -I. -isystem $(TOPDIR)/include
+ARCHXXINCLUDES = -I. -isystem $(TOPDIR)/include -isystem $(TOPDIR)/include/cxx
+ARCHSCRIPT = -T$(TOPDIR)/configs/$(CONFIG_ARCH_BOARD)/scripts/ld.script
+
+CC = $(CROSSDEV)gcc
+CXX = $(CROSSDEV)g++
+CPP = $(CROSSDEV)gcc -E
+LD = $(CROSSDEV)ld
+AR = $(CROSSDEV)ar rcs
+NM = $(CROSSDEV)nm
+OBJCOPY = $(CROSSDEV)objcopy
+OBJDUMP = $(CROSSDEV)objdump
+
+ARCHCCVERSION = ${shell $(CC) -v 2>&1 | sed -n '/^gcc version/p' | sed -e 's/^gcc version \([0-9\.]\)/\1/g' -e 's/[-\ ].*//g' -e '1q'}
+ARCHCCMAJOR = ${shell echo $(ARCHCCVERSION) | cut -d'.' -f1}
+
+
+ARCHOPTIMIZATION = $(MAXOPTIMIZATION) -fno-strict-aliasing -fno-strength-reduce -fomit-frame-pointer
+
+ifeq ($(CONFIG_DEBUG_SYMBOLS),y)
+  ARCHOPTIMIZATION += -g -ggdb3
+endif
+
+ARCHCFLAGS = -std=$(C_STD) -fno-builtin -fverbose-asm -ffunction-sections -fdata-sections
+ARCHCXXFLAGS = -std=$(CXX_STD) -fno-builtin -fno-exceptions -fno-rtti -fverbose-asm -ffunction-sections -fdata-sections
+ARCHWARNINGS = -Wall -Wstrict-prototypes -Wshadow
+ARCHWARNINGSXX = -Wall -Wshadow
+ARCHDEFINES =
+ARCHPICFLAGS = -fpic -msingle-pic-base -mpic-register=r10
+
+CFLAGS = $(ARCHCFLAGS) $(ARCHWARNINGS) $(ARCHOPTIMIZATION) $(ARCHCPUFLAGS) $(ARCHINCLUDES) $(ARCHDEFINES) $(EXTRADEFINES) -pipe
+CPICFLAGS = $(ARCHPICFLAGS) $(CFLAGS)
+CXXFLAGS = $(ARCHCXXFLAGS) $(ARCHWARNINGSXX) $(ARCHOPTIMIZATION) $(ARCHCPUFLAGS) $(ARCHXXINCLUDES) $(ARCHDEFINES) $(EXTRADEFINES) -pipe
+CXXPICFLAGS = $(ARCHPICFLAGS) $(CXXFLAGS)
+CPPFLAGS = $(ARCHINCLUDES) $(ARCHDEFINES) $(EXTRADEFINES)
+AFLAGS = $(CFLAGS) -D__ASSEMBLY__
+
+NXFLATLDFLAGS1 = -r -d -warn-common
+NXFLATLDFLAGS2 = $(NXFLATLDFLAGS1) -T$(TOPDIR)/binfmt/libnxflat/gnu-nxflat-pcrel.ld -no-check-sections
+LDNXFLATFLAGS = -e main -s 2048
+
+OBJEXT = .o
+LIBEXT = .a
+EXEEXT = .elf
+
+LDFLAGS = -nostartfiles -nodefaultlibs --gc-sections -Map=$(TOPDIR)/nuttx.map --cref
+
+ifeq ($(CONFIG_DEBUG_SYMBOLS),y)
+  LDFLAGS += -g
+endif
+
+HOSTCC = gcc
+HOSTINCLUDES = -I.
+HOSTCFLAGS = -Wall -Wstrict-prototypes -Wshadow -g -pipe
+HOSTLDFLAGS =

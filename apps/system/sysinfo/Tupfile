@@ -1,0 +1,19 @@
+#
+# file: apps/system/sysinfo/Tupfile
+#
+# author: Freddie Chopin, http://www.distortec.com http://www.freddiechopin.info
+# date: 2012-12-03
+#
+
+ifeq (@(SYSTEM_SYSINFO),y)
+
+include_rules
+
+# get the list of files
+include files.mk
+
+: foreach $(ASRCS) |> !as |>
+: foreach $(CSRCS) |> !cc |>
+: foreach $(CXXSRCS) |> !cxx |>
+
+endif

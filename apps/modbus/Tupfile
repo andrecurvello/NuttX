@@ -1,0 +1,35 @@
+#
+# file: apps/modbus/Tupfile
+#
+# author: Freddie Chopin, http://www.distortec.com http://www.freddiechopin.info
+# date: 2012-12-03
+#
+
+ifeq (@(MODBUS),y)
+
+include_rules
+
+include files.mk
+include ascii/files.mk
+include functions/files.mk
+include nuttx/files.mk
+include rtu/files.mk
+include tcp/files.mk
+
+CFLAGS += -I$(APPDIR)/modbus/functions
+CFLAGS += -I$(APPDIR)/modbus/nuttx
+ifeq (@(MB_ASCII_ENABLED),y)
+	CFLAGS += -I$(APPDIR)/modbus/ascii
+endif
+ifeq (@(MB_RTU_ENABLED),y)
+	CFLAGS += -I$(APPDIR)/modbus/rtu
+endif
+ifeq (@(MB_RTU_ENABLED),y)
+	CFLAGS += -I$(APPDIR)/modbus/rtu
+endif
+
+: foreach $(ASRCS) |> !as |>
+: foreach $(CSRCS) |> !cc |>
+: foreach $(CXXSRCS) |> !cxx |>
+
+endif

@@ -1,0 +1,32 @@
+#
+# file: nuttx/lib/Tupfile
+#
+# author: Freddie Chopin, http://www.distortec.com http://www.freddiechopin.info
+# date: 2012-12-03
+#
+
+include_rules
+
+include stdio/files.mk
+include stdlib/files.mk
+include unistd/files.mk
+include sched/files.mk
+include string/files.mk
+include pthread/files.mk
+include semaphore/files.mk
+include signal/files.mk
+include mqueue/files.mk
+include math/files.mk
+include fixedmath/files.mk
+include net/files.mk
+include time/files.mk
+include libgen/files.mk
+include dirent/files.mk
+include termios/files.mk
+include queue/files.mk
+include misc/files.mk
+
+: foreach $(ASRCS) |> !as |> {objects}
+: foreach $(CSRCS) |> !cc |> {objects}
+: foreach $(CXXSRCS) |> !cxx |> {objects}
+: {objects} |> !ar |> lib%d.a

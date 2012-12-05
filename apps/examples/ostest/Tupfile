@@ -1,0 +1,20 @@
+#
+# file: apps/examples/ostest/Tupfile
+#
+# author: Freddie Chopin, http://www.distortec.com http://www.freddiechopin.info
+# date: 2012-12-05
+#
+
+ifeq (@(EXAMPLES_OSTEST),y)
+
+include_rules
+
+# get the list of files
+include files.mk
+
+: foreach $(ASRCS) |> !as |>
+: foreach $(CSRCS) |> !cc |>
+: foreach $(CXXSRCS) |> !cxx |>
+
+endif
+
