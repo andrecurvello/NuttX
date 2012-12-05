@@ -111,7 +111,7 @@ ifeq ($(WINTOOL),y)
   		   -I "${shell cygpath -w $(ARCH_SRCDIR)/common}" \
   		   -I "${shell cygpath -w $(ARCH_SRCDIR)/armv7-m}"
 else
-  CFLAGS	+= -I$(ARCH_SRCDIR)/chip -I$(ARCH_SRCDIR)/common -I$(ARCH_SRCDIR)/armv7-m
+  CFLAGS	+= -I$(CHIP_SRC) -I$(ARCH_SRCDIR)/common -I$(ARCH_SRCDIR)/armv7-m
 endif
 
 all: libboard$(LIBEXT)

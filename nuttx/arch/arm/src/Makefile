@@ -34,7 +34,7 @@
 ############################################################################
 
 -include $(TOPDIR)/Make.defs
--include chip/Make.defs
+-include $(CHIP_SRC)/Make.defs
 
 ARCH_SRCDIR = $(TOPDIR)/arch/$(CONFIG_ARCH)/src
 ifeq ($(CONFIG_ARCH_CORTEXM3),y)   # Cortex-M3 is ARMv7-M
@@ -49,13 +49,13 @@ endif
 
 ifeq ($(WINTOOL),y)
   NUTTX = "${shell cygpath -w $(TOPDIR)/nuttx}"
-  CFLAGS += -I "${shell cygpath -w $(ARCH_SRCDIR)/chip}" \
+  CFLAGS += -I "${shell cygpath -w $(CHIP_SRC)}" \
             -I "${shell cygpath -w $(ARCH_SRCDIR)/common}" \
             -I "${shell cygpath -w $(ARCH_SRCDIR)/$(ARCH_SUBDIR)}" \
             -I "${shell cygpath -w $(TOPDIR)/sched}"
 else
   NUTTX = $(TOPDIR)/nuttx
-  CFLAGS += -I$(ARCH_SRCDIR)/chip -I$(ARCH_SRCDIR)/common \
+  CFLAGS += -I$(CHIP_SRC) -I$(ARCH_SRCDIR)/common \
             -I$(ARCH_SRCDIR)/$(ARCH_SUBDIR) -I$(TOPDIR)/sched
 endif
 
@@ -88,7 +88,7 @@ LDLIBS = $(patsubst lib%,-l%,$(basename $(notdir $(LINKLIBS))))
 LIBGCC = "${shell $(CC) $(ARCHCPUFLAGS) -print-libgcc-file-name}"
 GCC_LIBDIR := ${shell dirname $(LIBGCC)}
 
-VPATH = chip:common:$(ARCH_SUBDIR)
+VPATH = $(CHIP_SRC_MSYS):common:$(ARCH_SUBDIR)
 
 all: $(HEAD_OBJ) libarch$(LIBEXT)
 
@@ -133,11 +133,11 @@ endif
 
 # Dependencies
 
-.depend: Makefile chip/Make.defs $(SRCS)
+.depend: Makefile $(CHIP_SRC)/Make.defs $(SRCS)
 	$(Q) if [ -e $(BOARD_SRC)/Makefile ]; then \
 	$(MAKE) -C $(BOARD_SRC) TOPDIR="$(TOPDIR)" depend ; \
 	fi
-	$(Q) $(MKDEP) --dep-path chip --dep-path common --dep-path $(ARCH_SUBDIR) \
+	$(Q) $(MKDEP) --dep-path $(CHIP_SRC) --dep-path common --dep-path $(ARCH_SUBDIR) \
 	 $(CC) -- $(CFLAGS) -- $(SRCS) >Make.dep
 	$(Q) touch $@
 
