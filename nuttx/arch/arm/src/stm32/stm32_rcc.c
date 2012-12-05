@@ -77,11 +77,11 @@
 /* Include chip-specific clocking initialization logic */
 
 #if defined(CONFIG_STM32_STM32F10XX)
-#  include "chip/stm32f10xxx_rcc.c"
+#  include "stm32/stm32f10xxx_rcc.c"
 #elif defined(CONFIG_STM32_STM32F20XX)
-#  include "chip/stm32f20xxx_rcc.c"
+#  include "stm32/stm32f20xxx_rcc.c"
 #elif defined(CONFIG_STM32_STM32F40XX)
-#  include "chip/stm32f40xxx_rcc.c"
+#  include "stm32/stm32f40xxx_rcc.c"
 #else
 #  error "Unsupported STM32 chip"
 #endif
