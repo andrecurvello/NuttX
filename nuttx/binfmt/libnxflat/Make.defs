@@ -35,15 +35,13 @@
 
 ifeq ($(CONFIG_NXFLAT),y)
 
-# NXFLAT application interfaces
+# get the list of files
+include libnxflat/files.mk
 
-BINFMT_CSRCS += nxflat.c
-
-# NXFLAT library
-
-BINFMT_CSRCS += libnxflat_init.c libnxflat_uninit.c libnxflat_load.c \
-			   libnxflat_unload.c libnxflat_verify.c libnxflat_read.c \
-			   libnxflat_bind.c
+# strip the path, leaving only names
+BINFMT_ASRCS := $(notdir $(BINFMT_ASRCS))
+BINFMT_CSRCS := $(notdir $(BINFMT_CSRCS))
+BINFMT_CXXSRCS := $(notdir $(BINFMT_CXXSRCS))
 
 # Hook the libnxflat subdirectory into the build
 

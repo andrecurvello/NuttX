@@ -34,24 +34,12 @@
 ############################################################################
 
 # Include sensor drivers
-# These drivers depend on I2C support
 
-ifeq ($(CONFIG_I2C),y)
+# get the list of files
+include sensors/files.mk
 
-ifeq ($(CONFIG_I2C_TRANSFER),y)
-  CSRCS += lis331dl.c
-endif
-
-ifeq ($(CONFIG_I2C_LM75),y)
-  CSRCS += lm75.c
-endif
-endif
-
-# Quadrature encoder upper half
-
-ifeq ($(CONFIG_QENCODER),y)
-  CSRCS += qencoder.c
-endif
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Include sensor driver build support
 

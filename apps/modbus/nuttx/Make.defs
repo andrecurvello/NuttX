@@ -33,7 +33,13 @@
 #
 ############################################################################
 
-CSRCS += portevent.c portother.c portserial.c porttimer.c
+# get the list of files
+include nuttx/files.mk
+
+# strip the path, leaving only names
+ASRCS := $(notdir $(ASRCS))
+CSRCS := $(notdir $(CSRCS))
+CXXSRCS := $(notdir $(CXXSRCS))
 
 DEPPATH += --dep-path nuttx
 VPATH += :nuttx

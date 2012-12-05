@@ -34,15 +34,12 @@
 ############################################################################
 
 ifeq ($(CONFIG_NFS),y)
-# Files required for NFS file system support
 
-ASRCS +=
-CSRCS +=
+# get the list of files
+include nfs/files.mk
 
-# Files required for NFS RPC
-
-ASRCS +=
-CSRCS += rpc_clnt.c nfs_util.c nfs_vfsops.c
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Argument for dependency checking
 

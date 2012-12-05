@@ -35,20 +35,11 @@
 
 # Add the pthread C files to the build
 
-CSRCS += pthread_attrinit.c pthread_attrdestroy.c \
-		  pthread_attrsetschedpolicy.c pthread_attrgetschedpolicy.c \
-		  pthread_attrsetinheritsched.c pthread_attrgetinheritsched.c \
-		  pthread_attrsetstacksize.c pthread_attrgetstacksize.c \
-		  pthread_attrsetschedparam.c pthread_attrgetschedparam.c \
-		  pthread_barrierattrinit.c pthread_barrierattrdestroy.c \
-		  pthread_barrierattrgetpshared.c pthread_barrierattrsetpshared.c \
-		  pthread_condattrinit.c pthread_condattrdestroy.c \
-		  pthread_mutexattrinit.c pthread_mutexattrdestroy.c \
-		  pthread_mutexattrgetpshared.c pthread_mutexattrsetpshared.c
+# get the list of files
+include pthread/files.mk
 
-ifeq ($(CONFIG_MUTEX_TYPES),y)
-CSRCS += pthread_mutexattrsettype.c pthread_mutexattrgettype.c
-endif
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Add the pthread directory to the build
 

@@ -36,8 +36,11 @@
 ifeq ($(CONFIG_FS_ROMFS),y)
 # Files required for ROMFS file system support
 
-ASRCS +=
-CSRCS += fs_romfs.c fs_romfsutil.c
+# get the list of files
+include romfs/files.mk
+
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Argument for dependency checking
 

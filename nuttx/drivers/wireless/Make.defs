@@ -35,9 +35,11 @@
 
 ifeq ($(CONFIG_WIRELESS),y)
 
-# Include wireless drivers
+# get the list of files
+include wireless/files.mk
 
-CSRCS += cc1101.c ISM1_868MHzGFSK100kbps.c ISM2_905MHzGFSK250kbps.c
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Include wireless build support
 

@@ -35,19 +35,13 @@
 
 ifeq ($(CONFIG_ELF),y)
 
-# ELF application interfaces
+# get the list of files
+include libelf/files.mk
 
-BINFMT_CSRCS += elf.c
-
-# ELF library
-
-BINFMT_CSRCS += libelf_bind.c libelf_init.c libelf_iobuffer.c libelf_load.c \
-			    libelf_read.c libelf_sections.c libelf_symbols.c libelf_uninit.c \
-			    libelf_unload.c libelf_verify.c
-
-ifeq ($(CONFIG_BINFMT_CONSTRUCTORS),y)
-BINFMT_CSRCS += libelf_ctors.c libelf_dtors.c
-endif
+# strip the path, leaving only names
+BINFMT_ASRCS := $(notdir $(BINFMT_ASRCS))
+BINFMT_CSRCS := $(notdir $(BINFMT_CSRCS))
+BINFMT_CXXSRCS := $(notdir $(BINFMT_CXXSRCS))
 
 # Hook the libelf subdirectory into the build
 

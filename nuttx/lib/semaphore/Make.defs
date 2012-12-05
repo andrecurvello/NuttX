@@ -35,7 +35,11 @@
 
 # Add the semaphore C files to the build
 
-CSRCS += sem_init.c sem_getvalue.c
+# get the list of files
+include semaphore/files.mk
+
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Add the semaphore directory to the build
 

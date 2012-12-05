@@ -35,15 +35,11 @@
 
 ifeq ($(CONFIG_MMCSD),y)
 
-# Include MMC/SD drivers
+# get the list of files
+include mmcsd/files.mk
 
-ifeq ($(CONFIG_MMCSD_SDIO),y)
-CSRCS += mmcsd_sdio.c
-endif
-
-ifeq ($(CONFIG_MMCSD_SPI),y)
-CSRCS += mmcsd_spi.c mmcsd_debug.c
-endif
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Include MMC/SD driver build support
 

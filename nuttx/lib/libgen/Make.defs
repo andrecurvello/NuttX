@@ -35,7 +35,11 @@
 
 # Add the libgen C files to the build
 
-CSRCS += lib_basename.c lib_dirname.c
+# get the list of files
+include libgen/files.mk
+
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Add the libgen directory to the build
 

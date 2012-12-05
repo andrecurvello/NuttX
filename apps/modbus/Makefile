@@ -39,12 +39,10 @@ include $(APPDIR)/Make.defs
 
 # FreeModBus Library
 
-ASRCS =
-CSRCS =
-
 ifeq ($(CONFIG_MODBUS),y)
 
-CSRCS += mb.c
+include files.mk
+
 DEPPATH = --dep-path .
 VPATH = .
 

@@ -42,9 +42,11 @@ ifneq ($(CONFIG_NFILE_DESCRIPTORS),0)
 
 ifeq ($(CONFIG_SERCOMM_CONSOLE),y)
 
-# Include serial drivers
+# get the list of files
+include sercomm/files.mk
 
-CSRCS += console.c uart.c
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Include sercomm build support
 

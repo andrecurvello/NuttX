@@ -36,16 +36,16 @@
 
 # Include SYSLOG drivers (only one should be enabled)
 
+# get the list of files
+include syslog/files.mk
+
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
+
 ifeq ($(CONFIG_SYSLOG),y)
 
 # If no special loggin devices are implemented, then the default SYSLOG
 # logic at fs/fs_syslog.c will be used
-
-# (Add other SYSLOG drivers here)
-
-ifeq ($(CONFIG_RAMLOG),y)
-  CSRCS += ramlog.c
-endif
 
 # Include SYSLOG build support
 
@@ -60,7 +60,6 @@ ifeq ($(CONFIG_RAMLOG),y)
 
 # Include RAMLOG build support
 
-CSRCS += ramlog.c
 DEPPATH += --dep-path syslog
 VPATH += :syslog
 

@@ -41,12 +41,8 @@ include $(APPDIR)/Make.defs
 
 # Source and object files
 
-ASRCS		=
-CSRCS		= namedapp.c exec_namedapp.c
-
-ifeq ($(CONFIG_APPS_BINDIR),y)
-CSRCS		+= binfs.c
-endif
+# get the list of files
+include files.mk
 
 AOBJS		= $(ASRCS:.S=$(OBJEXT))
 COBJS		= $(CSRCS:.c=$(OBJEXT))

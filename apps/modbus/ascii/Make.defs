@@ -35,7 +35,13 @@
 
 ifeq ($(CONFIG_MB_ASCII_ENABLED),y)
 
-CSRCS += mbascii.c
+# get the list of files
+include ascii/files.mk
+
+# strip the path, leaving only names
+ASRCS := $(notdir $(ASRCS))
+CSRCS := $(notdir $(CSRCS))
+CXXSRCS := $(notdir $(CXXSRCS))
 
 DEPPATH += --dep-path ascii
 VPATH += :ascii

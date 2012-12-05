@@ -35,8 +35,11 @@
 
 # Add the stdlib C files to the build
 
-CSRCS += lib_abs.c lib_abort.c lib_imaxabs.c lib_labs.c lib_llabs.c \
-		  lib_rand.c lib_qsort.c
+# get the list of files
+include stdlib/files.mk
+
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Add the stdlib directory to the build
 

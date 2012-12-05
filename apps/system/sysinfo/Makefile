@@ -52,8 +52,8 @@ APPNAME		= sysinfo
 PRIORITY	= SCHED_PRIORITY_DEFAULT
 STACKSIZE	= 768
 
-ASRCS		=
-CSRCS		= sysinfo.c
+# get the list of files
+include files.mk
 
 AOBJS		= $(ASRCS:.S=$(OBJEXT))
 COBJS		= $(CSRCS:.c=$(OBJEXT))

@@ -37,23 +37,11 @@ ifeq ($(CONFIG_USBDEV),y)
 
 # Include USB device drivers
 
-ifeq ($(CONFIG_PL2303),y)
-  CSRCS += pl2303.c
-endif
+# get the list of files
+include usbdev/files.mk
 
-ifeq ($(CONFIG_CDCACM),y)
-  CSRCS += cdcacm.c cdcacm_desc.c
-endif
-
-ifeq ($(CONFIG_USBMSC),y)
-  CSRCS += usbmsc.c usbmsc_desc.c usbmsc_scsi.c
-endif
-
-ifeq ($(CONFIG_USBDEV_COMPOSITE),y)
-  CSRCS += composite.c composite_desc.c
-endif
-
-CSRCS += usbdev_trace.c usbdev_trprintf.c
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Include USB device build support
 

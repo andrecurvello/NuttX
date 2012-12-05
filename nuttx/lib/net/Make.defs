@@ -35,8 +35,11 @@
 
 # Add the networking C files to the build
 
-CSRCS += lib_etherntoa.c lib_htons.c lib_htonl.c lib_inetaddr.c
-CSRCS += lib_inetntoa.c lib_inetntop.c lib_inetpton.c
+# get the list of files
+include net/files.mk
+
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Add the net directory to the build
 

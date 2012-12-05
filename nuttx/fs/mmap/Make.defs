@@ -33,11 +33,10 @@
 #
 ############################################################################
 
-ASRCS +=
-CSRCS += fs_mmap.c
+# get the list of files
+include mmap/files.mk
 
-ifeq ($(CONFIG_FS_RAMMAP),y)
-CSRCS += fs_munmap.c fs_rammap.c
-endif
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 MMAPDEPPATH = --dep-path mmap

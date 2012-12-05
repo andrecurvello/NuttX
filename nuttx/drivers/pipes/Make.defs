@@ -37,7 +37,11 @@ ifneq ($(CONFIG_NFILE_DESCRIPTORS),0)
 
 # Include pipe driver
 
-CSRCS += pipe.c fifo.c pipe_common.c
+# get the list of files
+include pipes/files.mk
+
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Include pipe build support
 

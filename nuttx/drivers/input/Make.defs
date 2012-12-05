@@ -37,35 +37,11 @@
 
 ifeq ($(CONFIG_INPUT),y)
 
-# Include the selected touchscreen drivers
+# get the list of files
+include input/files.mk
 
-ifeq ($(CONFIG_INPUT_TSC2007),y)
-  CSRCS += tsc2007.c
-endif
-
-ifeq ($(CONFIG_INPUT_ADS7843E),y)
-  CSRCS += ads7843e.c
-endif
-
-ifeq ($(CONFIG_INPUT_MAX11802),y)
-  CSRCS += max11802.c
-endif
-
-ifeq ($(CONFIG_INPUT_STMPE811),y)
-  CSRCS += stmpe811_base.c
-ifneq ($(CONFIG_INPUT_STMPE811_TSC_DISABLE),y)
-  CSRCS += stmpe811_tsc.c
-endif
-ifneq ($(CONFIG_INPUT_STMPE811_GPIO_DISABLE),y)
-  CSRCS += stmpe811_gpio.c
-endif
-ifneq ($(CONFIG_INPUT_STMPE811_ADC_DISABLE),y)
-  CSRCS += stmpe811_adc.c
-endif
-ifneq ($(CONFIG_INPUT_STMPE811_TEMP_DISABLE),y)
-  CSRCS += stmpe811_temp.c
-endif
-endif
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Include input device driver build support
 

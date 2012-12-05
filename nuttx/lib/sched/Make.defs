@@ -35,7 +35,11 @@
 
 # Add the sched C files to the build
 
-CSRCS += sched_getprioritymax.c sched_getprioritymin.c
+# get the list of files
+include sched/files.mk
+
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Add the sched directory to the build
 

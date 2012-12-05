@@ -37,7 +37,11 @@ ifneq ($(CONFIG_NFILE_DESCRIPTORS),0)
 
 # Add the dirent C files to the build
 
-CSRCS += lib_readdirr.c lib_telldir.c
+# get the list of files
+include dirent/files.mk
+
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Add the dirent directory to the build
 

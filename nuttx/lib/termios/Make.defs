@@ -41,13 +41,16 @@ ifeq ($(CONFIG_SERIAL_TERMIOS),y)
 
 # Add the termios C files to the build
 
-CSRCS += lib_cfgetspeed.c lib_cfsetspeed.c lib_tcflush.c
-CSRCS += lib_tcgetattr.c lib_tcsetattr.c
+# get the list of files
+include termios/files.mk
+
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Add the termios directory to the build
 
 DEPPATH += --dep-path termios
-VPATH += termios
+VPATH += :termios
 
 endif
 endif

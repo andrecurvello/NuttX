@@ -33,8 +33,13 @@
 #
 ############################################################################
 
-CSRCS += mbfunccoils.c mbfuncdiag.c mbfuncdisc.c mbfuncholding.c
-CSRCS += mbfuncinput.c mbfuncother.c mbutils.c
+# get the list of files
+include functions/files.mk
+
+# strip the path, leaving only names
+ASRCS := $(notdir $(ASRCS))
+CSRCS := $(notdir $(CSRCS))
+CXXSRCS := $(notdir $(CXXSRCS))
 
 DEPPATH += --dep-path functions
 VPATH += :functions

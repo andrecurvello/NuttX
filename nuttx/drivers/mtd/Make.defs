@@ -37,19 +37,11 @@
 
 # Include MTD drivers
 
-CSRCS += at45db.c flash_eraseall.c ftl.c m25px.c rammtd.c ramtron.c
+# get the list of files
+include mtd/files.mk
 
-ifeq ($(CONFIG_MTD_AT24XX),y)
-CSRCS += at24xx.c
-endif
-
-ifeq ($(CONFIG_MTD_SST25),y)
-CSRCS += sst25.c
-endif
-
-ifeq ($(CONFIG_MTD_W25),y)
-CSRCS += w25.c
-endif
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Include MTD driver support
 

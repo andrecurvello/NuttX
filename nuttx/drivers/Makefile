@@ -65,25 +65,8 @@ include usbdev/Make.defs
 include usbhost/Make.defs
 include wireless/Make.defs
 
-ifneq ($(CONFIG_NFILE_DESCRIPTORS),0)
-  CSRCS += dev_null.c dev_zero.c loop.c
-
-ifneq ($(CONFIG_DISABLE_MOUNTPOINT),y)
-  CSRCS += ramdisk.c rwbuffer.c
-endif
-
-ifeq ($(CONFIG_CAN),y)
-  CSRCS += can.c
-endif
-
-ifeq ($(CONFIG_PWM),y)
-  CSRCS += pwm.c
-endif
-
-ifeq ($(CONFIG_WATCHDOG),y)
-  CSRCS += watchdog.c
-endif
-endif
+# get the list of files
+include files.mk
 
 AOBJS		= $(ASRCS:.S=$(OBJEXT))
 COBJS		= $(CSRCS:.c=$(OBJEXT))

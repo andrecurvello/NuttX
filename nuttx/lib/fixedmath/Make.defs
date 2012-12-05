@@ -35,7 +35,11 @@
 
 # Add the fixed precision math C files to the build
 
-CSRCS += lib_rint.c lib_fixedmath.c lib_b16sin.c lib_b16cos.c lib_b16atan2.c
+# get the list of files
+include fixedmath/files.mk
+
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Add the fixed precision math directory to the build
 

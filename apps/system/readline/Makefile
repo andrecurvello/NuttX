@@ -43,8 +43,8 @@ endif
 
 # The Readline Library
 
-ASRCS		=
-CSRCS		= readline.c
+# get the list of files
+include files.mk
 
 AOBJS		= $(ASRCS:.S=$(OBJEXT))
 COBJS		= $(CSRCS:.c=$(OBJEXT))

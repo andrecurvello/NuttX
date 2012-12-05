@@ -35,13 +35,11 @@
 
 ifneq ($(CONFIG_NFILE_DESCRIPTORS),0)
 
-# Include serial drivers
+# get the list of files
+include serial/files.mk
 
-CSRCS += serial.c serialirq.c lowconsole.c
-
-ifeq ($(CONFIG_16550_UART),y)
-  CSRCS += uart_16550.c
-endif
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Include serial build support
 

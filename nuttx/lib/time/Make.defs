@@ -35,8 +35,11 @@
 
 # Add the time C files to the build
 
-CSRCS += lib_mktime.c lib_gmtime.c lib_gmtimer.c lib_strftime.c \
-		  lib_calendar2utc.c lib_daysbeforemonth.c lib_isleapyear.c lib_time.c
+# get the list of files
+include time/files.mk
+
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Add the time directory to the build
 

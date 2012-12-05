@@ -37,31 +37,11 @@
 
 ifeq ($(CONFIG_NX_LCDDRIVER),y)
 
-# Include LCD drivers
+# get the list of files
+include lcd/files.mk
 
-ifeq ($(CONFIG_LCD_P14201),y)
-  CSRCS += p14201.c
-endif
-
-ifeq ($(CONFIG_LCD_NOKIA6100),y)
-  CSRCS += nokia6100.c
-endif
-
-ifeq ($(CONFIG_LCD_UG2864AMBAG01),y)
-  CSRCS += ug-2864ambag01.c
-endif
-
-ifeq ($(CONFIG_LCD_UG9664HSWAG01),y)
-  CSRCS += ug-9664hswag01.c
-endif
-
-ifeq ($(CONFIG_LCD_SSD1289),y)
-  CSRCS += ssd1289.c
-endif
-
-ifeq ($(CONFIG_LCD_MIO283QT2),y)
-  CSRCS += mio283qt2.c
-endif
+# strip the path, leaving only names
+CSRCS := $(notdir $(CSRCS))
 
 # Include LCD driver build support
 

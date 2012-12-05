@@ -42,15 +42,13 @@ CFLAGS			+= ${shell $(TOPDIR)/tools/incdir.sh $(INCDIROPT) "$(CC)" $(TOPDIR)/sch
 
 # Basic BINFMT source files 
 
-BINFMT_ASRCS	=
-BINFMT_CSRCS	= binfmt_globals.c binfmt_register.c binfmt_unregister.c \
-				  binfmt_loadmodule.c binfmt_unloadmodule.c binfmt_execmodule.c \
-				  binfmt_exec.c binfmt_dumpmodule.c
+# get the list of files
+include files.mk
 
-# Symbol table source files
-
-BINFMT_CSRCS	+= symtab_findbyname.c symtab_findbyvalue.c \
-				   symtab_findorderedbyname.c symtab_findorderedbyvalue.c
+# strip the path, leaving only names
+BINFMT_ASRCS := $(notdir $(BINFMT_ASRCS))
+BINFMT_CSRCS := $(notdir $(BINFMT_CSRCS))
+BINFMT_CXXSRCS := $(notdir $(BINFMT_CXXSRCS))
 
 # Add configured binary modules
 
