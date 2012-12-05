@@ -33,7 +33,7 @@
 #
 ############################################################################
 
-TOPDIR := ${shell pwd | sed -e 's/ /\\ /g'}
+TOPDIR ?= ${shell pwd | sed -e 's/ /\\ /g'}
 -include ${TOPDIR}/.config
 -include ${TOPDIR}/tools/Config.mk
 -include ${TOPDIR}/Make.defs
@@ -538,16 +538,16 @@ ifeq ($(CONFIG_RRLOAD_BINARY),y)
 	fi
 endif
 ifeq ($(CONFIG_INTELHEX_BINARY),y)
-	@echo "CP: $(BIN).hex"
-	$(Q) $(OBJCOPY) $(OBJCOPYARGS) -O ihex $(BIN) $(BIN).hex
+	@echo "CP: nuttx.hex"
+	$(Q) $(OBJCOPY) $(OBJCOPYARGS) -O ihex $(BIN) nuttx.hex
 endif
 ifeq ($(CONFIG_MOTOROLA_SREC),y)
-	@echo "CP: $(BIN).srec"
-	$(Q) $(OBJCOPY) $(OBJCOPYARGS) -O srec $(BIN) $(BIN).srec
+	@echo "CP: nuttx.srec"
+	$(Q) $(OBJCOPY) $(OBJCOPYARGS) -O srec $(BIN) nuttx.srec
 endif
 ifeq ($(CONFIG_RAW_BINARY),y)
-	@echo "CP: $(BIN).bin"
-	$(Q) $(OBJCOPY) $(OBJCOPYARGS) -O binary $(BIN) $(BIN).bin
+	@echo "CP: nuttx.bin"
+	$(Q) $(OBJCOPY) $(OBJCOPYARGS) -O binary $(BIN) nuttx.bin
 endif
 
 # $(BIN)
